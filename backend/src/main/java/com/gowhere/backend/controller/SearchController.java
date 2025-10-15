@@ -32,16 +32,28 @@ public class SearchController {
             @RequestParam(required = false) String region,
             @RequestParam(required = false) String tag,
             @RequestParam(defaultValue = "createdAt") String sort,
-            @RequestParam(defaultValue = "desc") String dir,
+            @RequestParam(required = false) String dir, // null 허용
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size
     ) {
-        Sort.Direction d = "asc".equalsIgnoreCase(dir) ? Sort.Direction.ASC : Sort.Direction.DESC;
-        String key = ALLOWED_SORTS.contains(sort) ? sort : "createdAt"; //만약 Allowed_sorts안에 sort 있으면 그 값 쓰고 없으면 createdAt쓰자
+        // "likeCount,desc" 같이 콤마 포함도 허용
+        String sortKey = sort;
+        String sortDir = (dir == null || dir.isBlank()) ? "desc" : dir;
+        if (sort.contains(",")) {
+            String[] parts = sort.split(",", 2);
+            sortKey = parts[0].trim();
+            sortDir = parts[1].trim();
+        }
 
-        //검색 결과를 몇개씩 어떤 순서로 보여줄지
-        Pageable pageable = PageRequest.of(page, size, Sort.by(d, key));
+        // 화이트리스트(허용 컬럼만)
+        if (!ALLOWED_SORTS.contains(sortKey)) {
+            sortKey = "createdAt";
+        }
+
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortKey));
         return searchService.searchPosts(q, region, tag, pageable);
     }
+
 
 }

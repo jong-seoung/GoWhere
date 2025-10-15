@@ -35,6 +35,6 @@ public class TravelPost {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id") // FK 이름 명시적으로 지정 (권장)
+    @JoinColumn(name = "author_id")
     private User author;            // 작성자 (User 엔티티와 연결)
 }
