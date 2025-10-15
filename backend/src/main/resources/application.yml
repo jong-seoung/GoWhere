@@ -24,9 +24,11 @@ spring:
             client-secret: ${GITHUB_CLIENT_SECRET}
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: 0rKb28zzmWhuRXbQvyMZbSEOaosKhQ/1N7utrZb4vyo=
   expiration: 86400000
   refresh-expiration: 604800000
+
+
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}
@@ -39,4 +41,6 @@ server:
   port: 8080
 
 frontend:
-  url: ${FRONTEND_URL}
+  url: http://localhost:5173
+backend:
+  url: http://localhost:8080
