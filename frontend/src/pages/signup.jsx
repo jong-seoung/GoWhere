@@ -22,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       await register(formData);
-      navigate("/");
+      navigate("/email-verification");
     } catch (err) {
       console.error(err);
     }

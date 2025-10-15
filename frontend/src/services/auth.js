@@ -14,12 +14,16 @@ export const authService = {
 
   async register(userData) {
     const response = await api.post("/api/auth/register", userData);
-    const { access_token, refresh_token, user } = response.data;
+    return response.data;
+  },
 
-    localStorage.setItem("accessToken", access_token);
-    localStorage.setItem("refreshToken", refresh_token);
-    localStorage.setItem("user", JSON.stringify(user));
+  async sendEmail (email) {
+    const response = await api.post(`/api/auth/sendEmail`, {email});
+    return response.data;
+  },
 
+  async verifyEmail (code, email) {
+    const response = await api.post(`/api/auth/verifyEmail/${code}`, {email});
     return response.data;
   },
 

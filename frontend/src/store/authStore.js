@@ -31,8 +31,6 @@ const useAuthStore = create((set) => ({
     try {
       const data = await authService.register(userData);
       set({
-        user: data.user,
-        isAuthenticated: true,
         loading: false,
       });
       return data;
@@ -55,6 +53,40 @@ const useAuthStore = create((set) => ({
   },
 
   setAuth: (authData) => set(authData),
+
+  sendEmail: async (email) => {
+    set({ loading: true, error: null });
+    try {
+      const data = await authService.sendEmail(email);
+      set({
+        loading: false,
+      });
+      return data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || "sendEmail failed",
+      });
+      throw err;
+    }
+  },
+
+  verifyEmail: async (code, email) => {
+    set({ loading: true, error: null });
+    try {
+      const data = await authService.verifyEmail(code, email);
+      set({
+        loading: false,
+      });
+      return data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || "verifyEmail failed",
+      });
+      throw err;
+    }
+  },
 }));
 
 export default useAuthStore;

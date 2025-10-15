@@ -31,7 +31,15 @@ const Login = () => {
       await login(loginData);
       navigate("/");
     } catch (err) {
-      console.error(err);
+      if (
+        err.response &&
+        err.response.status === 403 &&
+        err.response.data.message === "계정 활성화가 필요합니다."
+      ) {
+        navigate("/email-verification");
+      } else {
+        console.error(err);
+      }
     }
   };
 
