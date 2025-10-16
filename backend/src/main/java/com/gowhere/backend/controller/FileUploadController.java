@@ -17,8 +17,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FileUploadController {
 
-    private FileUploadService fileUploadService;
-    private UserService userService;
+    private final FileUploadService fileUploadService;
+    private final UserService userService;
 
     @PostMapping("/profile-image")
     public ResponseEntity<Map<String, String>> uploadProfileImage(@RequestParam("file")MultipartFile file){
