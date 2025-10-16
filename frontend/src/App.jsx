@@ -40,6 +40,12 @@ const App = () => {
             isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
           }
         />
+        <Route
+          path="/profile/:userId"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
