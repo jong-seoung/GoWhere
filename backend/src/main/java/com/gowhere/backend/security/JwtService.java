@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.expiration}")
@@ -26,6 +26,7 @@ public class JwtService {
 
     @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
+
 
     public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
