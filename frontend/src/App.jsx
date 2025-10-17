@@ -1,12 +1,41 @@
-import PostList from "./components/PostList";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import useAuthStore from "./store/authStore";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
+import Profile from "./pages/profile";
+import OAuth2Callback from "./pages/OAuth2Callback";
 
-export default function App() {
+const App = () => {
+  const { isAuthenticated } = useAuthStore();
+
   return (
-    <div style={{ minHeight: "100vh", background: "#f7f7f7" }}>
-      <h1 style={{ fontWeight: 800, fontSize: 24, padding: 16 }}>
-        여행 게시글 검색/정렬
-      </h1>
-      <PostList />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+        />
+        <Route
+          path="/signup"
+          element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
+        />
+        <Route path="/oauth2/callback" element={<OAuth2Callback />} />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? <Home /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/profile/:userId"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
+
+export default App;
