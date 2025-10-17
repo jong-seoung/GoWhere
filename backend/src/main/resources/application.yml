@@ -4,6 +4,7 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+  # DATABASE 설정
   #  datasource:
   #    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
   #    username: ${DB_USERNAME}
@@ -12,6 +13,7 @@ spring:
     hibernate:
       ddl-auto: update
       show-sql: true
+  # Security 설정
   security:
     oauth2:
       client:
@@ -22,11 +24,51 @@ spring:
           github:
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
+  # Redis 설정
+  data:
+    redis:
+      host: localhost # 배포 환경으로 바꿀시 변경해야함
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  # Jackson JSON 설정
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    time-zone: Asia/Seoul
+
+
+# Email
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: ${GOOGLE_EMAIL}
+  password: ${GOOGLE_PASSWORD}
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
+  auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30?
+
 
 jwt:
   secret: ${JWT_SECRET}
   expiration: 86400000
   refresh-expiration: 604800000
+
 
 aws:
   access-key-id: ${AWS_ACCESS_KEY_ID}
@@ -35,8 +77,10 @@ aws:
   s3:
     bucket-name: ${AWS_BUCKET_NAME}
 
+
 server:
   port: 8080
+
 
 frontend:
   url: ${FRONTEND_URL}

@@ -4,6 +4,7 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile";
+import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
 
 const App = () => {
@@ -25,6 +26,18 @@ const App = () => {
           path="/"
           element={
             isAuthenticated ? <Home /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/profile/:userId"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/email-verification"
+          element={
+            isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
           }
         />
         <Route

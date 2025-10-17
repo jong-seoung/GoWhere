@@ -49,6 +49,15 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// json <-> java
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

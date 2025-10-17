@@ -1,17 +1,16 @@
 package com.gowhere.backend.controller;
 
-import com.gowhere.backend.dto.AuthRequest;
-import com.gowhere.backend.dto.AuthResponse;
-import com.gowhere.backend.dto.RefreshTokenRequest;
-import com.gowhere.backend.dto.RegisterRequest;
+import com.gowhere.backend.dto.*;
 import com.gowhere.backend.service.AuthService;
+import com.gowhere.backend.service.MailService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,13 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final MailService mailService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
+    public ResponseEntity<?> register(
             @Valid @RequestBody RegisterRequest request
             ) {
-        AuthResponse response = authService.register(request);
-        return ResponseEntity.ok(response);
+        boolean response = authService.register(request);
+        if (response) {
+            return ResponseEntity.ok(Map.of("message", "register success, check email"));
+        }
+        else{
+            return ResponseEntity.ok(Map.of("message", "register failed."));
+        }
     }
 
     @PostMapping("/login")
@@ -42,5 +47,17 @@ public class AuthController {
     ) {
         AuthResponse response = authService.refreshToken(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/sendEmail")
+    @ResponseBody
+    public ResponseEntity<?> emailCheck(@RequestBody EmailRequest request) throws MessagingException, UnsupportedEncodingException {
+        String Code = mailService.sendSimpleMessage(request.getEmail());
+        return ResponseEntity.ok(Map.of("message", "send email is success"));
+    }
+
+    @PostMapping("/verifyEmail/{emailCode}")
+    public Boolean verifyEmail(@RequestBody EmailRequest emailRequest, @PathVariable String emailCode) {
+        return mailService.verifyEmail(emailRequest, emailCode);
     }
 }
