@@ -36,12 +36,3 @@ out/
 ### VS Code ###
 .vscode/
 
-# IntelliJ 설정 폴더
-.idea/
-
-# 환경 변수 파일
-.env
-frontend/.env
-backend/.env
-
-
