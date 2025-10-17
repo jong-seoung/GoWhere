@@ -74,7 +74,7 @@ public class AuthService {
                     .refreshToken(refreshToken)
                     .user(UserDto.fromEntity(user))
                     .build();
-        } catch (BadRequestException e) {
+        } catch (Exception e) {
             throw new AuthenticationException("Invalid email or password");
         }
     }
