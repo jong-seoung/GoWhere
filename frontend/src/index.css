@@ -45,7 +45,7 @@
   }
 
   .auth-container {
-    @apply min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-400 via-sky-500 to-cyan-400;
+    @apply min-h-screen flex flex-col justify-center items-center bg-gradient-to-br;
   }
 
   .auth-box {

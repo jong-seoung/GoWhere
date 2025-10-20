@@ -4,9 +4,9 @@ import useUserStore from "../store/userStore";
 import useAuthStore from "../store/authStore";
 import userService from "../services/user";
 
-import ProfileHeader from "../components/profile/ProfileHeader";
 import ProfileInfo from "../components/profile/ProfileInfo";
 import EditProfileModal from "../components/profile/EditProfileModal";
+import MainLayout from "../components/layout/MainLayout";
 
 const Profile = () => {
   const { userId } = useParams();
@@ -78,31 +78,34 @@ const Profile = () => {
   }, [getUserProfile, userId]);
 
   return (
-    <div className="bg-gray-50">
-      <div className="bg-white min-h-screen max-w-2xl mx-auto flex flex-col">
-        <ProfileHeader username={userProfile?.username} />
+    <MainLayout>
+      <div>
+        <div className="flex justify-between items-start gap-40">
+          <div className="w-[320px] p-20">
+            <ProfileInfo
+              userProfile={userProfile}
+              isOwnProfile={isOwnProfile}
+              uploading={uploading}
+              onEditProfile={() => setShowEditModal(true)}
+              onFollow={handleFollow}
+              onImageChange={handleFileChange}
+            />
 
-        <ProfileInfo
-          userProfile={userProfile}
-          isOwnProfile={isOwnProfile}
-          uploading={uploading}
-          onEditProfile={() => setShowEditModal(true)}
-          onFollow={handleFollow}
-          onImageChange={handleFileChange}
-        />
+            {showEditModal && (
+              <EditProfileModal
+                onClose={() => {
+                  setShowEditModal(false);
+                  getUserProfile(userId);
+                }}
+                currentProfile={userProfile}
+              />
+            )}
+          </div>
 
+          <div className="flex-1 p-20">내가 작성한 글</div>
+        </div>
       </div>
-
-      {showEditModal && (
-        <EditProfileModal
-          onClose={() => {
-            setShowEditModal(false);
-            getUserProfile(userId);
-          }}
-          currentProfile={userProfile}
-        />
-      )}
-    </div>
+    </MainLayout>
   );
 };
 
