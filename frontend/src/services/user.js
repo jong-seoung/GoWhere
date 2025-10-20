@@ -3,6 +3,7 @@ import api from "./api";
 const userService = {
   getUserProfile: async (userId) => {
     const response = await api.get(`/api/users/${userId}`);
+    console.log("User Profile Data:", response.data);
     return response.data;
   },
 

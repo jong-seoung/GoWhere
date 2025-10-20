@@ -5,20 +5,35 @@ import Input from "../ui/Input";
 import userService from "../../services/user";
 import useAuthStore from "../../store/authStore";
 
+const SOCIAL_TYPES = [
+  { key: "INSTAGRAM", label: "Instagram" },
+  { key: "FACEBOOK", label: "Facebook" },
+  { key: "TWITTER", label: "Twitter" },
+  { key: "TIKTOK", label: "TikTok" },
+  { key: "NAVER_BLOG", label: "Naver Blog" },
+];
+
 const EditProfileModal = ({ onClose, currentProfile }) => {
   const { user, setAuth } = useAuthStore();
   const [formData, setFormData] = useState({
     fullName: "",
     bio: "",
+    socialLinks: {},
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (currentProfile) {
+      const links = {};
+      currentProfile.socialLinks?.forEach((link) => {
+        links[link.socialType] = link.url;
+      });
+
       setFormData({
         fullName: currentProfile.fullName || "",
         bio: currentProfile.bio || "",
+        socialLinks: links,
       });
     }
   }, [currentProfile]);
@@ -28,6 +43,16 @@ const EditProfileModal = ({ onClose, currentProfile }) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleSocialChange = (type, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      socialLinks: {
+        ...prev.socialLinks,
+        [type]: value,
+      },
     }));
   };
 
@@ -45,14 +70,25 @@ const EditProfileModal = ({ onClose, currentProfile }) => {
       return;
     }
 
+    const socialLinkRequests = SOCIAL_TYPES.map((type) => ({
+      socialType: type.key,
+      url: formData.socialLinks[type.key]?.trim() || "",
+    }));
+
     try {
       setLoading(true);
-      const updatedProfile = await userService.updateProfile(formData);
+
+      const updatedProfile = await userService.updateProfile({
+        fullName: formData.fullName,
+        bio: formData.bio,
+        socialLinks: socialLinkRequests,
+      });
 
       const updatedUser = {
         ...user,
         fullName: updatedProfile.fullName,
         bio: updatedProfile.bio,
+        socialLinks: updatedProfile.socialLinks,
       };
 
       setAuth({
@@ -63,7 +99,6 @@ const EditProfileModal = ({ onClose, currentProfile }) => {
       });
 
       localStorage.setItem("user", JSON.stringify(updatedUser));
-
       onClose();
     } catch (err) {
       console.error(err);
@@ -86,13 +121,11 @@ const EditProfileModal = ({ onClose, currentProfile }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 form-group">
+        <form onSubmit={handleSubmit} className="p-4 form-group space-y-4">
           {error && <div className="input-error">{error}</div>}
 
           <div>
-            <label className="text-label">
-              Full Name
-            </label>
+            <label className="text-label">Full Name</label>
             <Input
               type="text"
               name="fullName"
@@ -101,15 +134,11 @@ const EditProfileModal = ({ onClose, currentProfile }) => {
               placeholder="Enter your full name"
               maxLength={100}
             />
-            <p className="text-small-caption">
-              {formData.fullName.length}/100
-            </p>
+            <p className="text-small-caption">{formData.fullName.length}/100</p>
           </div>
 
           <div>
-            <label className="text-label">
-              Bio
-            </label>
+            <label className="text-label">Bio</label>
             <textarea
               name="bio"
               value={formData.bio}
@@ -119,11 +148,24 @@ const EditProfileModal = ({ onClose, currentProfile }) => {
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             />
-            <p className="text-small-caption">
-              {formData.bio.length}/160
-            </p>
+            <p className="text-small-caption">{formData.bio.length}/160</p>
           </div>
 
+          <div className="space-y-3">
+            <label className="text-label font-semibold">Social Links</label>
+            {SOCIAL_TYPES.map(({ key, label }) => (
+              <div key={key}>
+                <Input
+                  type="url"
+                  placeholder={`${label} URL (leave empty to remove)`}
+                  value={formData.socialLinks[key] || ""}
+                  onChange={(e) => handleSocialChange(key, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* 버튼 */}
           <div className="flex space-x-2 pt-2">
             <Button
               type="button"

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { FiCamera } from "react-icons/fi";
 import Avatar from "../common/Avatar";
+import SocialLinks from "../profile/SocialLink.jsx";
 
 const ProfileInfo = ({
   userProfile,
@@ -58,6 +59,7 @@ const ProfileInfo = ({
 
           <p className="font-semibold text-sm">{userProfile?.fullName}</p>
           <p className="text-sm mt-1">{userProfile?.bio}</p>
+          <SocialLinks links={userProfile?.socialLinks} />
         </div>
       </div>
     </div>
