@@ -19,7 +19,7 @@ public class ChecklistController {
     @PostMapping
     public ResponseEntity<Checklist> createChecklist(@PathVariable Long tripId, @RequestBody ChecklistDto dto) {
         dto.setTripId(tripId);
-        Checklist checklist = checklistService.creatChecklist(dto);
+        Checklist checklist = checklistService.createChecklist(dto);
 
         return ResponseEntity.ok(checklist);
     }
@@ -37,6 +37,7 @@ public class ChecklistController {
 
         return ResponseEntity.ok(updatedChecklist);
     }
+
 
     @DeleteMapping("/{checklistId}")
     public ResponseEntity<Void> deleteChecklist(@PathVariable Long checklistId) {

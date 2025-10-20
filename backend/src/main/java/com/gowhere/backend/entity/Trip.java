@@ -25,10 +25,20 @@ public class Trip {
     @Enumerated(EnumType.STRING)
     private com.gowhere.backend.entity.TripType triptype;
 
-    @ManyToOne
-    @JoinColumn(name = "destination_id")
-    private Destination destination;
+    // 출발지/목적지 주소
+    private String departure;
+    private double departureLat;
+    private double departureLng;
+
+    private String destination;
+    private double destinationLat;
+    private double destinationLng;
+
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Checklist> checklists = new ArrayList<>();
 
+    // ✅ 작성자 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User autor;
 }

@@ -18,7 +18,7 @@ public class Checklist {
     private boolean complete;
 
     @Enumerated(EnumType.STRING)
-    private com.gowhere.backend.entity.ChecklistType type;
+    private ChecklistType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_id")
