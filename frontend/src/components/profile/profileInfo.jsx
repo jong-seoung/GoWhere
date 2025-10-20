@@ -19,48 +19,47 @@ const ProfileInfo = ({
   };
 
   return (
-    <div className="p-4 border-divider">
-      <div className="flex items-start space-x-4">
-        <div className="relative">
-          <Avatar user={userProfile} size="large" />
-          {isOwnProfile && (
-            <button
-              onClick={handleProfileImageClick}
-              disabled={uploading}
-              className="absolute bottom-0 right-0 btn-primary rounded-full p-2 shadow-lg disabled:opacity-50"
-              aria-label="Upload profile image"
-            >
-              <FiCamera size={16} />
-            </button>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={onImageChange}
-            className="hidden"
-          />
-        </div>
+    <div className="w-[350px] h-[500px] border border-gray-200 rounded-2xl shadow-md bg-white flex flex-col justify-center items-center space-y-6 p-8">
+      {/* 프로필 이미지 */}
+      <div className="relative">
+        <Avatar user={userProfile} size="xlarge" />
+        {isOwnProfile && (
+          <button
+            onClick={handleProfileImageClick}
+            disabled={uploading}
+            className="absolute bottom-0 right-0 btn-primary rounded-full p-3 shadow-lg disabled:opacity-50"
+            aria-label="Upload profile image"
+          >
+            <FiCamera size={20} />
+          </button>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={onImageChange}
+          className="hidden"
+        />
+      </div>
 
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold">{userProfile?.username}</h2>
-            {isOwnProfile ? (
-              <button
-                onClick={onEditProfile}
-                className="px-4 py-1 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
-              >
-                Edit Profile
-              </button>
-            ) : (
-              <div></div>
-            )}
-          </div>
+      {/* 프로필 정보 */}
+      <div className="text-center">
+        <h2 className="text-2xl font-semibold">{userProfile?.username}</h2>
+        <p className="font-semibold text-lg">{userProfile?.fullName}</p>
+        <p className="text-md mt-2">{userProfile?.bio}</p>
 
-          <p className="font-semibold text-sm">{userProfile?.fullName}</p>
-          <p className="text-sm mt-1">{userProfile?.bio}</p>
+        <div className="mt-4">
           <SocialLinks links={userProfile?.socialLinks} />
         </div>
+
+        {isOwnProfile && (
+          <button
+            onClick={onEditProfile}
+            className="mt-4 px-6 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+          >
+            Edit Profile
+          </button>
+        )}
       </div>
     </div>
   );
