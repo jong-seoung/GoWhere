@@ -54,6 +54,7 @@ const Login = () => {
     window.location.href = `${
       import.meta.env.VITE_API_URL
     }/oauth2/authorization/${provider}`;
+    console.log(`Redirecting to ${provider} OAuth2 login: ${window.location.href}`);
   };
 
   return (
