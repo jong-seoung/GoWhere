@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { FiCamera } from "react-icons/fi";
-import Avatar from "../common/Avatar";
-import SocialLinks from "../profile/SocialLink.jsx";
+import Avatar from "../common/Avatar.jsx";
+import SocialLinks from "./SocialLink.jsx";
 
 const ProfileInfo = ({
   userProfile,
