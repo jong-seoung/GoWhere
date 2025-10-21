@@ -61,3 +61,4 @@ public class BookmarkController {
         return ResponseEntity.noContent().build();
     }
 }
+

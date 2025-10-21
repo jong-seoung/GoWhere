@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
-        Page<Bookmark> findByUserId(Long userId, Pageable pageable);
+    Page<Bookmark> findByUserId(Long userId, Pageable pageable);
 
     Optional<Bookmark> findByUserIdAndReviewId(Long userId, Long reviewId);
 

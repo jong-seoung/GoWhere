@@ -31,3 +31,4 @@ public class BookmarkResponse {
         this.reviewContent = bookmark.getReview() != null ? bookmark.getReview().getContent() : null;
     }
 }
+
