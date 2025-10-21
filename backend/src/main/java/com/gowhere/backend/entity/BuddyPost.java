@@ -1,10 +1,8 @@
 package com.gowhere.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.logging.log4j.util.Lazy;
-import org.springframework.data.annotation.Id;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,55 +11,57 @@ import java.util.Set;
 
 // 동행자 모집글
 
+@Builder
 @Entity
 @Table(name = "buddy_posts")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BuddyPost {
-    public BuddyPost() {
-    }
-
     public enum Status {
         OPEN, CLOSED
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
-    User host;
+    private User host;
 
-    String title;
-    String content;
+    private String title;
+    private String content;
 
-    String locationCode; //지역코드 ex)"JEJU"
-    String address; //주소 문자열
-    Double latitude; //위도
-    Double longitude;  //경도
+    private String locationCode; //지역코드 ex)"JEJU"
+    private String address; //주소 문자열
+    private Double latitude; //위도
+    private Double longitude;  //경도
 
-    LocalDate startDate;
-    LocalDate endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 
-    Integer capacity;
+    private Integer capacity;
 
     @ElementCollection
     @CollectionTable(name = "buddy_post_tags", joinColumns = @JoinColumn(name = "buddy_post_id"))
     @Column(name = "tag")
-    Set<String> tags = new HashSet<>(); //태그 목록
+    private Set<String> tags = new HashSet<>(); //태그 목록
 
 
     @Enumerated(EnumType.STRING)
-    Status status = Status.OPEN; //기본값
+    private Status status = Status.OPEN; //기본값
 
-
-    LocalDateTime createdAt; //모집글 작성시간
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt; //모집글 작성시간
     boolean deleted = false;
 
 
     //  양방향 매핑
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BuddyApplication> applications = new HashSet<>();
 

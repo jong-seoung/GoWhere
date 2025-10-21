@@ -70,8 +70,6 @@ public class User implements UserDetails {
     private String providerId;
 
 
-
-    // ✅ 추가: 이 유저가 작성한 여행 게시글들
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravelPost> travelPosts = new ArrayList<>();
 
