@@ -3,6 +3,8 @@ package com.gowhere.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "review")
@@ -32,6 +34,19 @@ public class Review {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // ✅ OneToMany 관계 추가 (젯브레인 AI 권장사항)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Bookmark> bookmarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

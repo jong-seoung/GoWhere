@@ -18,15 +18,14 @@ public class Rating {
     private Long id;
 
     @Column(nullable = false)
-    private double score;
+    private Integer ratingPoint;  // score -> ratingPoint로 통일
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -26,13 +26,15 @@ public class CommentController {
         return ResponseEntity.ok(commentService.createComment(reviewId, request));
     }
 
-    // 댓글 목록 조회
+    // 특정 리뷰의 댓글 목록 조회
     @GetMapping
-    public ResponseEntity<List<CommentResponse>> getCommentsByReviewId(@PathVariable Long reviewId) {
+    public ResponseEntity<List<CommentResponse>> getCommentsByReviewId(
+            @PathVariable Long reviewId
+    ) {
         return ResponseEntity.ok(commentService.getCommentsByReviewId(reviewId));
     }
 
-    // 댓글 수정ㅇ
+    // 댓글 수정
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
             @PathVariable Long reviewId,

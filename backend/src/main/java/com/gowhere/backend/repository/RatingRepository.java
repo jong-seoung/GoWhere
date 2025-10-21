@@ -8,11 +8,12 @@ import java.util.Optional;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
 
-    List<Rating> findByTripId(Long tripId);
-
-    Optional<Rating> findByUserIdAndTripId(Long userId, Long tripId);
-
-    boolean existsByUserIdAndTripId(Long userId, Long tripId);
-
-    void deleteByUserIdAndTripId(Long userId, Long tripId);
+    // reviewId 기반으로 변경
+    Optional<Rating> findByUserIdAndReviewId(Long userId, Long reviewId);
+    
+    boolean existsByUserIdAndReviewId(Long userId, Long reviewId);
+    
+    void deleteByUserIdAndReviewId(Long userId, Long reviewId);
+    
+    List<Rating> findByReviewId(Long reviewId);
 }

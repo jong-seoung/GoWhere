@@ -1,9 +1,15 @@
 package com.gowhere.backend.service;
 
-import com.gowhere.backend.entity.Rating;
 import com.gowhere.backend.dto.RatingRequest;
 import com.gowhere.backend.dto.RatingResponse;
+import com.gowhere.backend.entity.Rating;
+import com.gowhere.backend.entity.Review;
+import com.gowhere.backend.entity.User;
+import com.gowhere.backend.exception.BadRequestException;
+import com.gowhere.backend.exception.ResourceNotFoundException;
 import com.gowhere.backend.repository.RatingRepository;
+import com.gowhere.backend.repository.ReviewRepository;
+import com.gowhere.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,16 +22,27 @@ import java.util.stream.Collectors;
 public class RatingService {
 
     private final RatingRepository ratingRepository;
+    private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public RatingResponse addRating(Long userId, RatingRequest request) {
-        if (ratingRepository.existsByUserIdAndTripId(userId, request.getTripId())) {
-            throw new RuntimeException("이미 별점을 등록했습니다.");
+    public RatingResponse createRating(Long reviewId, Long userId, RatingRequest request) {
+        // 중복 체크
+        if (ratingRepository.existsByUserIdAndReviewId(userId, reviewId)) {
+            throw new BadRequestException("이미 별점을 등록했습니다.");
         }
+
+        // 리뷰 존재 확인
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("리뷰를 찾을 수 없습니다."));
+
+        // 유저 존재 확인
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("유저를 찾을 수 없습니다."));
 
         Rating rating = Rating.builder()
                 .userId(userId)
-                .tripId(request.getTripId())
+                .review(review)
                 .ratingPoint(request.getRatingPoint())
                 .build();
 
@@ -33,24 +50,31 @@ public class RatingService {
     }
 
     @Transactional
-    public RatingResponse updateRating(Long userId, RatingRequest request) {
-        Rating rating = ratingRepository.findByUserIdAndTripId(userId, request.getTripId())
-                .orElseThrow(() -> new RuntimeException("별점을 찾을 수 없습니다."));
+    public RatingResponse updateRating(Long reviewId, Long userId, RatingRequest request) {
+        Rating rating = ratingRepository.findByUserIdAndReviewId(userId, reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("별점을 찾을 수 없습니다."));
 
         rating.setRatingPoint(request.getRatingPoint());
         return new RatingResponse(ratingRepository.save(rating));
     }
 
     @Transactional(readOnly = true)
-    public List<RatingResponse> getRatingsByTrip(Long tripId) {
-        return ratingRepository.findByTripId(tripId).stream()
+    public RatingResponse getRating(Long reviewId, Long userId) {
+        Rating rating = ratingRepository.findByUserIdAndReviewId(userId, reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("별점을 찾을 수 없습니다."));
+        return new RatingResponse(rating);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RatingResponse> getRatingsByReview(Long reviewId) {
+        return ratingRepository.findByReviewId(reviewId).stream()
                 .map(RatingResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public Double getAverageRatingPoint(Long tripId) {
-        List<Rating> ratings = ratingRepository.findByTripId(tripId);
+    public Double getAverageRatingPoint(Long reviewId) {
+        List<Rating> ratings = ratingRepository.findByReviewId(reviewId);
         if (ratings.isEmpty()) {
             return 0.0;
         }
@@ -61,10 +85,10 @@ public class RatingService {
     }
 
     @Transactional
-    public void deleteRating(Long userId, Long tripId) {
-        if (!ratingRepository.existsByUserIdAndTripId(userId, tripId)) {
-            throw new RuntimeException("별점을 찾을 수 없습니다.");
+    public void deleteRating(Long reviewId, Long userId) {
+        if (!ratingRepository.existsByUserIdAndReviewId(userId, reviewId)) {
+            throw new ResourceNotFoundException("별점을 찾을 수 없습니다.");
         }
-        ratingRepository.deleteByUserIdAndTripId(userId, tripId);
+        ratingRepository.deleteByUserIdAndReviewId(userId, reviewId);
     }
 }

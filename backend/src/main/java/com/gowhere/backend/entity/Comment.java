@@ -26,9 +26,8 @@ public class Comment {
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
