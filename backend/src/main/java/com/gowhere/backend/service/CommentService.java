@@ -29,7 +29,7 @@ public class CommentService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("리뷰를 찾을 수 없습니다."));
 
-        // 추후 Security에서 인증 사용자로 대체
+        // 추후 Security에서 인증 사용자로 대체ㅇ
         User user = userRepository.findById(1L)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 

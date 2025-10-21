@@ -32,7 +32,7 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getCommentsByReviewId(reviewId));
     }
 
-    // 댓글 수정
+    // 댓글 수정ㅇ
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
             @PathVariable Long reviewId,
