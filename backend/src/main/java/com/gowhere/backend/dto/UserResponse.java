@@ -1,10 +1,13 @@
 package com.gowhere.backend.dto;
 
+import com.gowhere.backend.entity.SocialLink;
 import com.gowhere.backend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -17,6 +20,7 @@ public class UserResponse {
     private String fullName;
     private String profileImageUrl;
     private String bio;
+    private List<SocialLink> socialLinks;
 
     private String accessToken;
     private String refreshToken;
@@ -29,6 +33,7 @@ public class UserResponse {
                 .fullName(user.getFullName())
                 .profileImageUrl(user.getProfileImageUrl())
                 .bio(user.getBio())
+                .socialLinks(user.getSocialLinks())
                 .build();
     }
 }

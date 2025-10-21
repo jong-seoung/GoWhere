@@ -78,4 +78,7 @@ public class User implements UserDetails {
     private List<TravelPost> travelPosts = new ArrayList<>();
 
 
+    // SocialLink
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SocialLink> socialLinks = new ArrayList<>();
 }
