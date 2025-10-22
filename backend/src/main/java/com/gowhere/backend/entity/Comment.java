@@ -20,12 +20,15 @@ public class Comment {
     @Column(nullable = false, length = 500)
     private String content;
 
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
 
-    @Column(name = "user_id")
-    private Long userId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -41,7 +41,7 @@ public class RatingService {
                 .orElseThrow(() -> new ResourceNotFoundException("유저를 찾을 수 없습니다."));
 
         Rating rating = Rating.builder()
-                .userId(userId)
+                .user(user)
                 .review(review)
                 .ratingPoint(request.getRatingPoint())
                 .build();

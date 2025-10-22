@@ -20,8 +20,8 @@ public class ReviewResponse {
         this.title = review.getTitle();
         this.placeName = review.getPlaceName();
         this.content = review.getContent();
-        this.userId = review.getUserId();
-        this.tripId = review.getTripId();
+        this.userId = review.getUser().getId();
+        this.tripId = review.getTrip().getId();
         this.createdAt = review.getCreatedAt();
         this.updatedAt = review.getUpdatedAt();
     }

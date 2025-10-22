@@ -23,7 +23,7 @@ public class RatingResponse {
 
     public RatingResponse(Rating rating) {
         this.id = rating.getId();
-        this.userId = rating.getUserId();
+        this.userId = rating.getUser().getId();
         this.reviewId = rating.getReview() != null ? rating.getReview().getId() : null;
         this.ratingPoint = rating.getRatingPoint();
         this.createdAt = rating.getCreatedAt();

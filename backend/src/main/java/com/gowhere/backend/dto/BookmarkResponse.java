@@ -23,9 +23,9 @@ public class BookmarkResponse {
 
     public BookmarkResponse(Bookmark bookmark) {
         this.id = bookmark.getId();
-        this.userId = bookmark.getUserId();
+        this.userId = bookmark.getUser() != null ? bookmark.getUser().getId() : null;
         this.reviewId = bookmark.getReview() != null ? bookmark.getReview().getId() : null;
-        this.tripId = bookmark.getTripId();
+        this.tripId = bookmark.getTrip() != null ? bookmark.getTrip().getId() : null;
         this.isBookmark = bookmark.getIsBookmark();
         this.placeName = bookmark.getPlaceName();
         this.reviewContent = bookmark.getReview() != null ? bookmark.getReview().getContent() : null;

@@ -38,7 +38,7 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .content(request.getContent())
                 .review(review)
-                .userId(currentUser.getId())
+                .user(currentUser)
                 .build();
 
         commentRepository.save(comment);
@@ -60,14 +60,12 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("댓글을 찾을 수 없습니다."));
 
-        // reviewId 검증 추가
         if (!comment.getReview().getId().equals(reviewId)) {
             throw new BadRequestException("해당 리뷰의 댓글이 아닙니다.");
         }
 
-        // 현재 사용자 권한 체크
         User currentUser = authenticationService.getCurrentUser();
-        if (!comment.getUserId().equals(currentUser.getId())) {
+        if (comment.getUser().getId() != currentUser.getId()) {  //  .getUser()
             throw new BadRequestException("수정 권한이 없습니다.");
         }
 
@@ -80,14 +78,12 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("댓글을 찾을 수 없습니다."));
 
-        // reviewId 검증 추가
         if (!comment.getReview().getId().equals(reviewId)) {
             throw new BadRequestException("해당 리뷰의 댓글이 아닙니다.");
         }
 
-        // 현재 사용자 권한 체크
         User currentUser = authenticationService.getCurrentUser();
-        if (!comment.getUserId().equals(currentUser.getId())) {
+        if (comment.getUser().getId() != currentUser.getId()) {  // ✅ .getUser()
             throw new BadRequestException("삭제 권한이 없습니다.");
         }
 
@@ -95,13 +91,10 @@ public class CommentService {
     }
 
     private CommentResponse toResponse(Comment comment) {
-        User user = userRepository.findById(comment.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
-
         return CommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .authorName(user.getUsername())
+                .authorName(comment.getUser().getUsername())  // ✅ .getUser() 
                 .reviewId(comment.getReview().getId())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())

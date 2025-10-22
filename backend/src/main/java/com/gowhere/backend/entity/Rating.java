@@ -5,7 +5,10 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ratings")
+@Table(name = "ratings",
+       uniqueConstraints = @UniqueConstraint(
+           columnNames = {"user_id", "review_id"}
+       ))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,10 +21,7 @@ public class Rating {
     private Long id;
 
     @Column(nullable = false)
-    private Integer ratingPoint;  // score -> ratingPoint로 통일
-
-    @Column(name = "user_id")
-    private Long userId;
+    private Integer ratingPoint;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
@@ -31,6 +31,7 @@ public class Rating {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
