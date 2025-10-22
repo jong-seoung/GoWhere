@@ -12,9 +12,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+=======
+import java.util.*;
+>>>>>>> dev
 
 @Entity
 @Table(name = "users")
@@ -72,11 +76,23 @@ public class User implements UserDetails {
     private String providerId;
 
 
+<<<<<<< HEAD
 
     // ✅ 추가: 이 유저가 작성한 여행 게시글들
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravelPost> travelPosts = new ArrayList<>();
 
+=======
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TravelPost> travelPosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BuddyApplication> buddyApplications = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BuddyPost> hostedBuddyPosts = new HashSet<>();
+>>>>>>> dev
 
     // SocialLink
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
