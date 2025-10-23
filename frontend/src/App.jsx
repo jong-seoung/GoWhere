@@ -6,6 +6,7 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
+import PasswordFind from "./pages/PasswordFind";
 
 const App = () => {
   const { isAuthenticated } = useAuthStore();
@@ -38,6 +39,12 @@ const App = () => {
           path="/email-verification"
           element={
             isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            isAuthenticated ? <Navigate to="/" /> : <PasswordFind replace />
           }
         />
       </Routes>
