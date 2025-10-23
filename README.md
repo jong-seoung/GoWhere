@@ -12,6 +12,7 @@
 cd backend
 chmod +x gradlew
 git update-index --chmod=+x gradlew
+cd ..
 ```
 
 ### 최초 실행
