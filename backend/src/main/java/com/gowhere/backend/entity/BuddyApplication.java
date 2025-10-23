@@ -19,14 +19,14 @@ public class BuddyApplication {
     }
 
     public enum Status{
-        PENDING,APPROVING, REJECTED
+        PENDING,APPROVED, REJECTED
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "buddy_post_id")
     private BuddyPost post; //어떤 모집글에대한 신청인지
 
@@ -43,6 +43,8 @@ public class BuddyApplication {
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime appliedAt; //지원시간
+
+
     boolean deleted = false;
 
 

@@ -4,7 +4,7 @@ import useUserStore from "../store/userStore";
 import useAuthStore from "../store/authStore";
 import userService from "../services/user";
 
-import ProfileInfo from "../components/profile/ProfileInfo";
+import ProfileInfo from "../components/profile/profileInfo";
 import EditProfileModal from "../components/profile/EditProfileModal";
 import MainLayout from "../components/layout/MainLayout";
 

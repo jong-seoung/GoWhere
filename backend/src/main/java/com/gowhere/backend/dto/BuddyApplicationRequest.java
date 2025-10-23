@@ -12,8 +12,8 @@ import lombok.*;
 @Builder
 
 public class BuddyApplicationRequest {
-        @NotNull
-        private Long postId;      // 신청 대상 모집글 ID
+   @NotNull
+        private Long postId;           // 신청 대상 모집글 ID
 
         @NotBlank
         private String message;   // 신청자가 남기는 메시지

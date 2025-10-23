@@ -59,7 +59,7 @@ public class TripController {
         dto.setTripType(trip.getTriptype());
         dto.setDeparture(trip.getDeparture());
         dto.setDestination(trip.getDestination());
-        dto.setAuthorId(trip.getAutor().getId());
+        dto.setAuthorId(trip.getAuthor().getId());
         return dto;
     }
 }

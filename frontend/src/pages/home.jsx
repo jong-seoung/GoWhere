@@ -1,7 +1,8 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
-import api from "../services/api";
+import api from "../lib/api"; // 
 import MainLayout from "../components/layout/MainLayout";
 import Header from "../components/layout/Header";
 import PostList from "../components/PostList";
@@ -11,6 +12,7 @@ const Home = () => {
   const { logout } = useAuthStore();
 
   const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -27,16 +29,28 @@ const Home = () => {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
+  };
+
+  const validate = () => {
+    if (!formData.title.trim()) return "제목을 입력하세요.";
+    if (formData.startDate && formData.endDate && formData.endDate < formData.startDate) {
+      return "종료일은 시작일 이후여야 합니다.";
+    }
+    return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const msg = validate();
+    if (msg) return alert(msg);
+
     try {
-      await api.post("/api/travelplan", formData);
+      setSubmitting(true);
+      await api.post("/api/travelplan", formData); // 
       alert("여행 등록 완료 ✅");
       setShowForm(false);
       setFormData({
@@ -50,9 +64,9 @@ const Home = () => {
       });
     } catch (err) {
       console.error(err);
-      alert(
-        err.response?.data?.message || "등록 실패. 콘솔에서 에러를 확인하세요."
-      );
+      alert(err.response?.data?.message || "등록 실패. 콘솔에서 에러를 확인하세요.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -71,7 +85,7 @@ const Home = () => {
           </button>
         </div>
 
-        {/* ✅ 여행 등록 폼 */}
+       
         {showForm && (
           <div className="card max-w-2xl mx-auto mt-4">
             <h2 className="text-xl font-semibold mb-4">새 여행 등록</h2>
@@ -105,6 +119,7 @@ const Home = () => {
                 value={formData.endDate}
                 onChange={handleChange}
                 className="border p-2 rounded"
+                min={formData.startDate || undefined} // ✅ 시작일 이후로 제한
               />
               <input
                 type="text"
@@ -134,8 +149,9 @@ const Home = () => {
               <button
                 type="submit"
                 className="btn-primary w-full py-2 rounded-md mt-2"
+                disabled={submitting}
               >
-                등록하기
+                {submitting ? "등록 중..." : "등록하기"}
               </button>
             </form>
           </div>
