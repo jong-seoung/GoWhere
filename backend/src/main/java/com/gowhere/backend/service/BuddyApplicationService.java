@@ -19,11 +19,13 @@ public class BuddyApplicationService {
 
     private final BuddyApplicationRepository buddyApplicationRepository;
     private final BuddyPostRepository buddyPostRepository;
-    // ❌ private final AuthenticationService authenticationService;  // 제거
+    private final AuthenticationService authenticationService;
 
     /** 모집글 신청하기 */
     @Transactional
-    public BuddyApplication applyToPost(Long postId, User currentUser, String message) {
+    public BuddyApplication applyToPost(Long postId, String message) {
+        User currentUser = authenticationService.getCurrentUser();
+
         if (currentUser == null) {
             throw new SecurityException("인증되지 않은 요청입니다.");
         }

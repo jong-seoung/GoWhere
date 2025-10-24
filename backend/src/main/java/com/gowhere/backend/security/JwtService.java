@@ -18,7 +18,6 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -28,17 +27,13 @@ public class JwtService {
     @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
 
-    // 이메일(sub)만 반환하도록 수정
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
-    }
 
-    // id 클레임은 따로 추출
-    public Long extractUserId(String token) {
+    public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
-        Object id = claims.get("id");
-        if (id == null) return null;
-        return Long.valueOf(id.toString());
+        if (claims.containsKey("id")) {
+            return String.valueOf(claims.get("id"));
+        }
+        return claims.getSubject();
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -60,34 +55,41 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
+
     public String generateRefreshToken(UserDetails userDetails) {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
-    private String buildToken(Map<String, Object> extraClaims,
-                              UserDetails userDetails,
-                              long expiration) {
-        return Jwts.builder()
+    private String buildToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails,
+            long expiration
+    ) {
+        return Jwts
+                .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername()) // 이메일을 sub로 저장
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // 이메일 기반 검증으로
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
+        final String identifier = extractUsername(token);
 
-    private boolean isTokenExpired(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
+        if (userDetails instanceof User user) {
+
+            return identifier.equals(String.valueOf(user.getId()))
+                    || identifier.equals(user.getUsername());
+        }
+
+        return (identifier.equals(userDetails.getUsername()));
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
+        return Jwts
+                .parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(token)

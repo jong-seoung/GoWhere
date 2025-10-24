@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class BuddyApplicationRequest {
    @NotNull
         private Long postId;           // 신청 대상 모집글 ID

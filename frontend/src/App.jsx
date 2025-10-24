@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import useAuthStore from "./store/authStore";
 
-import Home from "./pages/Home";
+import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile";
@@ -15,23 +15,40 @@ import BuddyPostDetail from "./pages/buddy/BuddyPostDetail";
 import MyApplications from "./pages/buddy/MyApplications";
 import Applicants from "./pages/buddy/Applicants";
 
-function Protected({ children }) {
-  const { isAuthenticated } = useAuthStore();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return children;
-}
-
 export default function App() {
+  const { isAuthenticated } = useAuthStore();
+
   return (
     <BrowserRouter>
       <Routes>
         {/* 공개 */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/email-verify" element={<EmailVerify />} />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+        />
+        <Route
+          path="/signup"
+          element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
+        />
         <Route path="/oauth2/callback" element={<OAuth2Callback />} />
-        <Route path="/profile/:id" element={<Profile />} />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? <Home /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/profile/:userId"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/email-verification"
+          element={
+            isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
+          }
+        />
 
         {/* 동행자 허브/목록/상세 */}
         <Route path="/buddies" element={<BuddyHub />} />
@@ -42,28 +59,21 @@ export default function App() {
         <Route
           path="/buddies/new"
           element={
-            <Protected>
-              <BuddyCreateForm />
-            </Protected>
+            isAuthenticated ? <BuddyCreateForm replace /> : <Navigate to="/" />
           }
         />
         <Route
           path="/buddies/my-applications"
           element={
-            <Protected>
-              <MyApplications />
-            </Protected>
+            isAuthenticated ? <MyApplications replace /> : <Navigate to="/" />
           }
         />
         <Route
           path="/buddies/:id/applicants"
           element={
-            <Protected>
-              <Applicants />
-            </Protected>
+            isAuthenticated ? <Applicants replace /> : <Navigate to="/" />
           }
         />
-
         {/* fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

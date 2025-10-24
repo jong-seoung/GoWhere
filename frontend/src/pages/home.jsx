@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
-import api from "../lib/api";
+import api from "../services/api";
 import MainLayout from "../components/layout/MainLayout";
 import PostList from "../components/PostList"; // 네 프로젝트에 이미 있는 컴포넌트라고 가정
 
@@ -27,10 +27,10 @@ const Home = () => {
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
-    }));
+    });
   };
 
   const validate = () => {

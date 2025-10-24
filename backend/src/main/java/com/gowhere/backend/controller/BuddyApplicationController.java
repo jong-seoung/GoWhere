@@ -27,21 +27,25 @@ public class BuddyApplicationController {
     @PostMapping("/{postId}")
     public ResponseEntity<BuddyApplicationResponse> apply(
             @PathVariable Long postId,
-            @Valid @RequestBody BuddyApplicationRequest req,
-            @RequestAttribute("user") User currentUser   // 필터에서 꽂아준 User 엔티티 받기
-    ) {
-        log.info("apply postId={}, by userId={}", postId, currentUser.getId());
-        BuddyApplication app = buddyApplicationService.applyToPost(postId, currentUser, req.getMessage()); // ✅ 유저 전달
+            @Valid @RequestBody BuddyApplicationRequest req
+    ) {  //
+        log.info(String.valueOf(postId));
+
+        log.info(String.valueOf(req.getMessage()));
+        BuddyApplication app = buddyApplicationService.applyToPost(postId, req.getMessage());
+
         return ResponseEntity.ok(BuddyApplicationResponse.fromEntity(app));
     }
 
     /** 내 신청 내역 보기 */
     @GetMapping("/me")
     public ResponseEntity<List<BuddyApplicationResponse>> myApplications(
-            @RequestAttribute("user") User currentUser   // ✅ 통일
-    ) {
-        var apps = buddyApplicationService.getMyApplications(currentUser);
-        var res = apps.stream().map(BuddyApplicationResponse::fromEntity).toList();
+            @AuthenticationPrincipal User currentUser) {  // 수정된 부분
+
+        List<BuddyApplication> apps = buddyApplicationService.getMyApplications(currentUser);
+        List<BuddyApplicationResponse> res = apps.stream()
+                .map(BuddyApplicationResponse::fromEntity)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(res);
     }
 
@@ -49,10 +53,12 @@ public class BuddyApplicationController {
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<BuddyApplicationResponse>> applicants(
             @PathVariable Long postId,
-            @RequestAttribute("user") User currentUser   // ✅ 통일
-    ) {
-        var apps = buddyApplicationService.getApplicationsForMyPost(postId, currentUser);
-        var res = apps.stream().map(BuddyApplicationResponse::fromEntity).toList();
+            @AuthenticationPrincipal User currentUser) {  // 수정된 부분
+
+        List<BuddyApplication> apps = buddyApplicationService.getApplicationsForMyPost(postId, currentUser);
+        List<BuddyApplicationResponse> res = apps.stream()
+                .map(BuddyApplicationResponse::fromEntity)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(res);
     }
 
@@ -60,11 +66,11 @@ public class BuddyApplicationController {
     @PatchMapping("/{applicationId}/status")
     public ResponseEntity<BuddyApplicationResponse> updateStatus(
             @PathVariable Long applicationId,
-            @RequestParam String status,
-            @RequestAttribute("user") User currentUser   // ✅ 통일
-    ) {
-        var statusEnum = BuddyApplication.Status.valueOf(status.toUpperCase());
-        var updated = buddyApplicationService.updateStatus(applicationId, statusEnum, currentUser);
+            @RequestParam String status,  // 수정된 부분
+            @AuthenticationPrincipal User currentUser) {  // 수정된 부분
+
+        BuddyApplication.Status statusEnum = BuddyApplication.Status.valueOf(status.toUpperCase());  // 수정된 부분
+        BuddyApplication updated = buddyApplicationService.updateStatus(applicationId, statusEnum, currentUser);
         return ResponseEntity.ok(BuddyApplicationResponse.fromEntity(updated));
     }
 
@@ -72,8 +78,8 @@ public class BuddyApplicationController {
     @DeleteMapping("/{applicationId}")
     public ResponseEntity<Void> cancel(
             @PathVariable Long applicationId,
-            @RequestAttribute("user") User currentUser   // ✅ 통일
-    ) {
+            @AuthenticationPrincipal User currentUser) {  // 수정된 부분
+
         buddyApplicationService.cancel(applicationId, currentUser);
         return ResponseEntity.noContent().build();
     }

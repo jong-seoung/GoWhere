@@ -133,7 +133,7 @@ const Login = () => {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent font-semibold hover:from-blue-700 hover:to-sky-700 transition-all "
+              className="bg-linear-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent font-semibold hover:from-blue-700 hover:to-sky-700 transition-all "
             >
               Sign up
             </Link>
