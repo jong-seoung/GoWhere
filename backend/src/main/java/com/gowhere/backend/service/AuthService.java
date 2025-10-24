@@ -2,6 +2,8 @@ package com.gowhere.backend.service;
 
 import com.gowhere.backend.dto.*;
 import com.gowhere.backend.entity.AuthProvider;
+import com.gowhere.backend.entity.SocialLink;
+import com.gowhere.backend.entity.SocialType;
 import com.gowhere.backend.entity.User;
 import com.gowhere.backend.exception.AuthenticationException;
 import com.gowhere.backend.exception.BadRequestException;
@@ -10,15 +12,18 @@ import com.gowhere.backend.exception.UserNotActivatedException;
 import com.gowhere.backend.repository.UserRepository;
 import com.gowhere.backend.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final RedisTemplate<String, String> redisTemplate;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -99,5 +104,29 @@ public class AuthService {
                 .refreshToken(NewRefreshToken)
                 .user(UserDto.fromEntity(user))
                 .build();
-    };
+    }
+
+    public String getCode(String email){
+        return redisTemplate.opsForValue().get("PwChangeCodeCache::" + email);
+    }
+
+    public void changePassword(ChangePasswordRequest request){
+        String email = request.getEmail();
+
+        if (!request.getAuthCode().equals(getCode(email))){
+            throw new IllegalArgumentException("wrong Code");
+        }
+
+        if (!request.getPassword().equals(request.getPassword2())){
+            throw new IllegalArgumentException("Passwords do not match.");
+        }
+
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AuthenticationException("user not found: " + email));
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        userRepository.save(user);
+    }
 }
