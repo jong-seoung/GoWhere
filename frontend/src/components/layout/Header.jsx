@@ -1,4 +1,3 @@
-// src/components/layout/Header.jsx
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
@@ -12,12 +11,12 @@ const Header = ({ onLogout, handleProfilePage }) => {
           </Link>
         </h1>
         <div className="flex items-center space-x-4">
-          {/*/buddies 이동 버튼 */}
+          {/* 동행자 허브로 이동 */}
           <Link
             to="/buddies"
             className="px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition"
           >
-            + 동행자 모집 +{" "}
+            + 동행자 +
           </Link>
 
           {onLogout && (

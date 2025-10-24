@@ -43,16 +43,26 @@ export default function PostList() {
     try {
       const merged = { ...params, ...over };
       const res = await fetchPosts(merged);
+  
+      const page = res?.data ?? res;
+  
+      const safe = {
+        content: page?.content ?? [],
+        totalPages: page?.totalPages ?? page?.total_pages ?? 0,
+        number: page?.number ?? page?.page ?? 0,
+      };
+  
       setParams(merged);
-      setData(res);
+      setData(safe);
     } catch (e) {
+      console.error("fetchPosts error:", e?.response ?? e);
       setRawError(friendlyError(e));
       setData({ content: [], totalPages: 0, number: 0 });
     } finally {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => { load(); }, []);
 
   return (

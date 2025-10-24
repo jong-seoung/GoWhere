@@ -19,6 +19,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
@@ -29,51 +30,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        // 1. Authorization 헤더에서 JWT 토큰 추출
+
         final String authHeader = request.getHeader("Authorization");
 
+        // Authorization 헤더 없으면 패스
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String jwt = authHeader.substring(7);  // "Bearer " 제거
+        final String jwt = authHeader.substring(7);
+        final String username = jwtService.extractUsername(jwt); //  이메일
+        final Long userId = jwtService.extractUserId(jwt);        // id
 
-        // 2. 토큰에서 사용자 식별자 추출
-        final String userIdentifier = jwtService.extractUsername(jwt);
+        // 현재 인증 안 되어있을 때만 실행
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        // 3. 사용자 인증 정보가 없으면 DB에서 조회
-        if (userIdentifier != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userIdentifier);
-
-            // 4. 토큰 유효성 검증
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                // 5. SecurityContext에 인증 정보 설정
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
                                 userDetails.getAuthorities()
                         );
-
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                try {
-                    Long userId = Long.parseLong(userIdentifier);
+
+                // 토큰의 id로 DB에서 유저 찾아 request에 저장
+                if (userId != null) {
                     userRepository.findById(userId)
                             .ifPresent(user -> request.setAttribute("user", user));
-                } catch (NumberFormatException e) {
-                    userRepository.findByEmail(userIdentifier)
+                } else {
+                    userRepository.findByEmail(username)
                             .ifPresent(user -> request.setAttribute("user", user));
                 }
             }
-
-            filterChain.doFilter(request, response);
         }
+
+        filterChain.doFilter(request, response);
     }
 }

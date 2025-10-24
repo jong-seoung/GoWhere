@@ -1,4 +1,4 @@
-// src/pages/buddy/BuddyPostDetail.jsx
+// src/pages/buddy/BuddyPostDetail.jsx  모집글 상세 페이지
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { BuddyPostAPI, BuddyAppAPI } from "../../api/buddy";

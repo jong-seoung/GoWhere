@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
-import Header from "../../components/layout/Header";
+import Header from "./Header";
 
 const MainLayout = ({ children, className = "" }) => {
   const navigate = useNavigate();
@@ -12,13 +12,18 @@ const MainLayout = ({ children, className = "" }) => {
   };
 
   const handleProfilePage = () => {
-    navigate(`/profile/${user?.id}`);
+    if (user?.id) navigate(`/profile/${user.id}`);
   };
 
   return (
     <div className="min-h-screen bg-blue-50 flex justify-center">
-      <Header onLogout={handleLogout} handleProfilePage={handleProfilePage} />
-      <div className={`w-full relative mt-16 bg-gray-50 not-[]:${className}`}>{children}</div>
+      <Header
+        onLogout={user ? handleLogout : undefined}
+        handleProfilePage={handleProfilePage}
+      />
+      <div className={`w-full relative mt-16 bg-gray-50 ${className}`}>
+        {children}
+      </div>
     </div>
   );
 };

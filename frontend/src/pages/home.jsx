@@ -1,11 +1,9 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
-import api from "../lib/api"; // 
+import api from "../lib/api";
 import MainLayout from "../components/layout/MainLayout";
-import Header from "../components/layout/Header";
-import PostList from "../components/PostList";
+import PostList from "../components/PostList"; // 네 프로젝트에 이미 있는 컴포넌트라고 가정
 
 const Home = () => {
   const navigate = useNavigate();
@@ -50,7 +48,7 @@ const Home = () => {
 
     try {
       setSubmitting(true);
-      await api.post("/api/travelplan", formData); // 
+      await api.post("/api/travelplan", formData);
       alert("여행 등록 완료 ✅");
       setShowForm(false);
       setFormData({
@@ -72,8 +70,6 @@ const Home = () => {
 
   return (
     <MainLayout>
-      <Header onLogout={handleLogout} />
-
       <div style={{ minHeight: "100vh", background: "#f7f7f7" }}>
         <div className="flex items-center justify-between p-4">
           <h1 className="font-bold text-2xl">여행 게시글 검색/정렬</h1>
@@ -85,72 +81,18 @@ const Home = () => {
           </button>
         </div>
 
-       
         {showForm && (
           <div className="card max-w-2xl mx-auto mt-4">
             <h2 className="text-xl font-semibold mb-4">새 여행 등록</h2>
             <form className="space-y-3" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="title"
-                placeholder="제목"
-                value={formData.title}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-                required
-              />
-              <textarea
-                name="description"
-                placeholder="상세 설명"
-                value={formData.description}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-              />
-              <input
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                className="border p-2 rounded"
-              />
-              <input
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                className="border p-2 rounded"
-                min={formData.startDate || undefined} // ✅ 시작일 이후로 제한
-              />
-              <input
-                type="text"
-                name="tripType"
-                placeholder="여행 유형 (예: 국내, 해외)"
-                value={formData.tripType}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-              />
-              <input
-                type="text"
-                name="departure"
-                placeholder="출발지"
-                value={formData.departure}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-              />
-              <input
-                type="text"
-                name="destination"
-                placeholder="목적지"
-                value={formData.destination}
-                onChange={handleChange}
-                className="border p-2 rounded w-full"
-              />
-
-              <button
-                type="submit"
-                className="btn-primary w-full py-2 rounded-md mt-2"
-                disabled={submitting}
-              >
+              <input type="text" name="title" placeholder="제목" value={formData.title} onChange={handleChange} className="border p-2 rounded w-full" required />
+              <textarea name="description" placeholder="상세 설명" value={formData.description} onChange={handleChange} className="border p-2 rounded w-full" />
+              <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} className="border p-2 rounded" />
+              <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} className="border p-2 rounded" min={formData.startDate || undefined} />
+              <input type="text" name="tripType" placeholder="여행 유형 (예: 국내, 해외)" value={formData.tripType} onChange={handleChange} className="border p-2 rounded w-full" />
+              <input type="text" name="departure" placeholder="출발지" value={formData.departure} onChange={handleChange} className="border p-2 rounded w-full" />
+              <input type="text" name="destination" placeholder="목적지" value={formData.destination} onChange={handleChange} className="border p-2 rounded w-full" />
+              <button type="submit" className="btn-primary w-full py-2 rounded-md mt-2" disabled={submitting}>
                 {submitting ? "등록 중..." : "등록하기"}
               </button>
             </form>
