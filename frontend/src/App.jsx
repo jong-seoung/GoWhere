@@ -6,15 +6,12 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
-<<<<<<< HEAD
 import ReviewList from "./pages/ReviewList";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
 import ReviewForm from "./components/ReviewForm";
 import BookmarkPage from "./pages/BookmarkPage";
-=======
 import PasswordFind from "./pages/PasswordFind";
->>>>>>> dev
 
 const App = () => {
   const { isAuthenticated } = useAuthStore();
@@ -50,7 +47,6 @@ const App = () => {
           }
         />
         <Route
-<<<<<<< HEAD
           path="/reviews"
           element={
             isAuthenticated ? <ReviewPage /> : <Navigate to="/login" replace />
@@ -78,11 +74,12 @@ const App = () => {
           path="/bookmarks"
           element={
             isAuthenticated ? <BookmarkPage /> : <Navigate to="/login" replace />
-=======
+          }
+        />
+        <Route
           path="/forgot-password"
           element={
             isAuthenticated ? <Navigate to="/" /> : <PasswordFind replace />
->>>>>>> dev
           }
         />
       </Routes>
