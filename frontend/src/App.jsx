@@ -6,6 +6,8 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
+import Kakaomap from "./pages/Kakaomap";
+import Write from "./pages/write";
 
 const App = () => {
   const { isAuthenticated } = useAuthStore();
@@ -21,6 +23,12 @@ const App = () => {
           path="/signup"
           element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
         />
+        <Route
+          path="/email-verification"
+          element={
+            isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
+          }
+        />
         <Route path="/oauth2/callback" element={<OAuth2Callback />} />
         <Route
           path="/"
@@ -29,15 +37,15 @@ const App = () => {
           }
         />
         <Route
-          path="/profile/:userId"
+          path="/write"
           element={
-            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+            isAuthenticated ? <Write /> : <Navigate to="/login" replace />
           }
         />
         <Route
-          path="/email-verification"
+          path="/kakaomap"
           element={
-            isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
+            isAuthenticated ? <Kakaomap /> : <Navigate to="/login" replace />
           }
         />
         <Route
