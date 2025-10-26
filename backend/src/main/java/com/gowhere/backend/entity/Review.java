@@ -22,6 +22,7 @@ public class Review {
     private String title;
     private String placeName;
     private String content;
+    private Integer ratingPoint;  //별점 반영 추가
 
     
     @ManyToOne(fetch = FetchType.LAZY)

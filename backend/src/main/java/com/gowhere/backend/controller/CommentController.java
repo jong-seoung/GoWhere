@@ -44,6 +44,16 @@ public class CommentController {
         return ResponseEntity.ok(commentService.updateComment(reviewId, commentId, request));
     }
 
+    // 대댓글 작성
+    @PostMapping("/{parentCommentId}/replies")
+    public ResponseEntity<CommentResponse> createReply(
+            @PathVariable Long reviewId,
+            @PathVariable Long parentCommentId,
+            @Valid @RequestBody CommentRequest request
+    ) {
+        return ResponseEntity.ok(commentService.createReply(reviewId, parentCommentId, request));
+    }
+
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(

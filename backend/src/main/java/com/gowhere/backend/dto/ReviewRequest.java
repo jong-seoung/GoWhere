@@ -18,4 +18,5 @@ public class ReviewRequest {
     private String content;
 
     private Long tripId;
+    private Integer ratingPoint;  //별점 반영 추가
 }

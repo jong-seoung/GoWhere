@@ -28,7 +28,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
 
-    // userId 파라미터 제거, AuthenticationService 사용
+    // 댓글 작성
     public CommentResponse createComment(Long reviewId, CommentRequest request) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("리뷰를 찾을 수 없습니다."));
@@ -45,12 +45,34 @@ public class CommentService {
         return toResponse(comment);
     }
 
+    // 대댓글 작성
+    public CommentResponse createReply(Long reviewId, Long parentCommentId, CommentRequest request) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("리뷰를 찾을 수 없습니다."));
+
+        Comment parentComment = commentRepository.findById(parentCommentId)
+                .orElseThrow(() -> new ResourceNotFoundException("부모 댓글을 찾을 수 없습니다."));
+
+        User currentUser = authenticationService.getCurrentUser();
+
+        Comment reply = Comment.builder()
+                .content(request.getContent())
+                .review(review)
+                .user(currentUser)
+                .parentComment(parentComment)
+                .build();
+
+        commentRepository.save(reply);
+        return toResponse(reply);
+    }
+
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentsByReviewId(Long reviewId) {
         // null 대신 Pageable.unpaged() 사용
         return commentRepository.findByReviewId(reviewId, Pageable.unpaged())
                 .getContent()
                 .stream()
+                .filter(comment -> comment.getParentComment() == null) // 최상위 댓글만 필터링
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
@@ -94,8 +116,12 @@ public class CommentService {
         return CommentResponse.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .authorName(comment.getUser().getUsername())  // ✅ .getUser() 
+                .authorName(comment.getUser().getUsername())
                 .reviewId(comment.getReview().getId())
+                .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
+                .replies(comment.getReplies().stream()
+                        .map(this::toResponse)
+                        .collect(Collectors.toList()))
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

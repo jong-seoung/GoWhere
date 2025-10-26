@@ -10,6 +10,7 @@ public class ReviewResponse {
     private final String title;
     private final String placeName;
     private final String content;
+    private final Integer ratingPoint;  //별점 반영 추가
     private final Long userId;
     private final Long tripId;
     private final LocalDateTime createdAt;
@@ -20,6 +21,7 @@ public class ReviewResponse {
         this.title = review.getTitle();
         this.placeName = review.getPlaceName();
         this.content = review.getContent();
+        this.ratingPoint = review.getRatingPoint(); //별점 반영 추가
         this.userId = review.getUser().getId();
         this.tripId = review.getTrip().getId();
         this.createdAt = review.getCreatedAt();

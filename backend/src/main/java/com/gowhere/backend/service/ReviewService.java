@@ -36,6 +36,7 @@ public class ReviewService {
                 .title(request.getTitle())
                 .placeName(request.getPlaceName())
                 .content(request.getContent())
+                .ratingPoint(request.getRatingPoint()) // 별점 정보 저장 - 새로 추가된 필드
                 .user(user)
                 .trip(trip)
                 .build();
