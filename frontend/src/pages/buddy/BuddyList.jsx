@@ -51,7 +51,7 @@ export default function BuddyList() {
   const load = async (p = 0) => {
     setLoading(true);
     try {
-      const { data } = await BuddyPostAPI.search({ q, location, tag, hostId, page: p, size: 8 });
+      const { data } = await BuddyPostAPI.search({ q, hostId, page: p, size: 8 });
       setItems(data.content || []);
       setTotalPages(data.totalPages || 0);
       setPage(data.number || 0);
