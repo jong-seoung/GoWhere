@@ -76,7 +76,7 @@ public class DestinationService {
     // 작성자 권한 확인
     private void checkTripAuthor(Trip trip) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!trip.getAutor().getUsername().equals(username)) {
+        if (!trip.getAuthor().getUsername().equals(username)) {
             throw new RuntimeException("권한이 없습니다. 본인이 작성한 게시물의 목적지만 수정/삭제할 수 있습니다.");
         }
     }

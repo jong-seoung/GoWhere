@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
-import Header from "../../components/layout/Header";
+import Header from "./Header";
 
 const MainLayout = ({ children, className = "" }) => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const MainLayout = ({ children, className = "" }) => {
   };
 
   const handleProfilePage = () => {
-    navigate(`/profile/${user?.id}`);
+    if (user?.id) navigate(`/profile/${user.id}`);
   };
 
   return (

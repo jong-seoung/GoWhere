@@ -1,28 +1,19 @@
 package com.gowhere.backend.dto;
 
-
-import com.gowhere.backend.entity.BuddyPost;
-import com.gowhere.backend.entity.User;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-//동행 모집글 생성 요청 dto
-
+// 동행 모집글 생성 요청 dto
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BuddyPostCreateRequest {
-
 
     @NotBlank
     private String title;
@@ -31,22 +22,33 @@ public class BuddyPostCreateRequest {
     private String content;
 
     @NotBlank
-    private String address; //주소 문자열
-    private String locationCode; //지역코드 ex)"JEJU"
-    private Double latitude; //위도
-    private Double longitude;  //경도
+    private String address; // 주소 문자열
 
     @NotBlank
+    private String locationCode; // 지역코드 ex)"JEJU"
+
+    @DecimalMin(value = "-90.0", message = "위도는 -90 이상이어야 합니다.")
+    @DecimalMax(value = "90.0", message = "위도는 90 이하이어야 합니다.")
+    private Double latitude; // 위도
+
+    @DecimalMin(value = "-180.0", message = "경도는 -180 이상이어야 합니다.")
+    @DecimalMax(value = "180.0", message = "경도는 180 이하이어야 합니다.")
+    private Double longitude; // 경도
+
+    @NotNull
     private LocalDate startDate;
-    @NotBlank
+
+    @NotNull
     private LocalDate endDate;
 
-    @NotBlank
+    @NotNull
     @Positive
     private Integer capacity;
 
+    @Builder.Default
+    private Set<String> tags = new HashSet<>(); // 태그 목록
 
-    private Set<String> tags; //태그 목록
-
-
+    // 추가: 모집글 마감 여부 (기본값 false)
+    @Builder.Default
+    private boolean closed = false;
 }

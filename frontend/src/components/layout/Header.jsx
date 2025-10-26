@@ -10,25 +10,34 @@ const Header = ({ onLogout, handleProfilePage }) => {
             GoWhere
           </Link>
         </h1>
-        <div className="flex items-center space-x-4 mr-20">
-          {onLogout && (
-            <>
-              <button
-                onClick={handleProfilePage}
-                className="flex items-center space-x-2 text-gray-700 hover:text-blue-500 transition"
-              >
-                <FiUser size={22} />
-              </button>
-              <button
-                onClick={onLogout}
-                className="text-gray-700 hover:text-red-500 transition-colors"
-                title="Logout"
-                aria-label="Logout"
-              >
-                <FiLogOut size={24} />
-              </button>
-            </>
-          )}
+        <div className="flex items-center space-x-4">
+          <Link
+            to="/buddies"
+            className="px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition"
+          >
+            동행자
+          </Link>
+
+          <div className="flex items-center space-x-4 mr-20">
+            {onLogout && (
+              <>
+                <button
+                  onClick={handleProfilePage}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-blue-500 transition"
+                >
+                  <FiUser size={22} />
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="text-gray-700 hover:text-red-500 transition-colors"
+                  title="Logout"
+                  aria-label="Logout"
+                >
+                  <FiLogOut size={24} />
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </header>

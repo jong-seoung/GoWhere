@@ -1,5 +1,6 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import useAuthStore from "./store/authStore";
+
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
@@ -13,12 +14,20 @@ import ReviewForm from "./components/ReviewForm";
 import BookmarkPage from "./pages/BookmarkPage";
 import PasswordFind from "./pages/PasswordFind";
 
-const App = () => {
+import BuddyHub from "./pages/buddy/BuddyHub";
+import BuddyList from "./pages/buddy/BuddyList";
+import BuddyCreateForm from "./pages/buddy/BuddyCreateForm";
+import BuddyPostDetail from "./pages/buddy/BuddyPostDetail";
+import MyApplications from "./pages/buddy/MyApplications";
+import Applicants from "./pages/buddy/Applicants";
+
+export default function App() {
   const { isAuthenticated } = useAuthStore();
 
   return (
     <BrowserRouter>
       <Routes>
+        {/* 공개 */}
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/" /> : <Login />}
@@ -46,6 +55,22 @@ const App = () => {
             isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
           }
         />
+
+        {/* 동행자 허브/목록/상세 */}
+        <Route path="/buddies" element={<BuddyHub />} />
+        <Route path="/buddies/list" element={<BuddyList />} />
+        <Route path="/buddies/:id" element={<BuddyPostDetail />} />
+
+        <Route
+          path="/buddies/new"
+          element={
+            isAuthenticated ? (
+              <BuddyCreateForm replace />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
         <Route
           path="/reviews"
           element={
@@ -61,7 +86,11 @@ const App = () => {
         <Route
           path="/reviews/:id"
           element={
-            isAuthenticated ? <ReviewDetailPage /> : <Navigate to="/login" replace />
+            isAuthenticated ? (
+              <ReviewDetailPage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         <Route
@@ -73,7 +102,11 @@ const App = () => {
         <Route
           path="/bookmarks"
           element={
-            isAuthenticated ? <BookmarkPage /> : <Navigate to="/login" replace />
+            isAuthenticated ? (
+              <BookmarkPage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         <Route
@@ -82,9 +115,21 @@ const App = () => {
             isAuthenticated ? <Navigate to="/" /> : <PasswordFind replace />
           }
         />
+        <Route
+          path="/buddies/my-applications"
+          element={
+            isAuthenticated ? <MyApplications replace /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/buddies/:id/applicants"
+          element={
+            isAuthenticated ? <Applicants replace /> : <Navigate to="/" />
+          }
+        />
+        {/* fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
-};
-
-export default App;
+}

@@ -20,8 +20,11 @@ public class TravelPost {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    
+    @Column(length = 2000)
     private String content;
+    
+
 
     private String region;        // ex) "부산", "제주도"
     private String tags;          // ex) "#힐링,#자연"

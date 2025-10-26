@@ -48,5 +48,5 @@ public class Trip {
     // ✅ 작성자 추가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User autor;
+    private User author;
 }

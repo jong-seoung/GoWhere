@@ -19,9 +19,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BuddyPost {
-    public enum Status {
-        OPEN, CLOSED
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,16 +48,17 @@ public class BuddyPost {
     private Set<String> tags = new HashSet<>(); //태그 목록
 
 
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.OPEN; //기본값
+    @Column(nullable = false)
+    private boolean closed = false;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt; //모집글 작성시간
-    boolean deleted = false;
+    private LocalDateTime createdAt; // 모집글 작성시간
+
+    private boolean deleted = false;
 
 
-    //  양방향 매핑
+    
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BuddyApplication> applications = new HashSet<>();
