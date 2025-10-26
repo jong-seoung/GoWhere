@@ -87,6 +87,40 @@ const useAuthStore = create((set) => ({
       throw err;
     }
   },
+
+  changePwCode: async (code, email) => {
+    set({ loading: true, error: null });
+    try {
+      const data = await authService.changePwCode(code, email);
+      set({
+        loading: false,
+      });
+      return data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || "changePwCode failed",
+      });
+      throw err;
+    }
+  },
+
+  changePw: async (formData) => {
+    set({ loading: true, error: null });
+    try {
+      const data = await authService.changePw(formData);
+      set({
+        loading: false,
+      });
+      return data;
+    } catch (err) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || "changePw failed",
+      });
+      throw err;
+    }
+  },
 }));
 
 export default useAuthStore;
