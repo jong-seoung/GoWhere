@@ -6,6 +6,11 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
+import ReviewList from "./pages/ReviewList";
+import ReviewPage from "./pages/ReviewPage";
+import ReviewDetailPage from "./pages/ReviewDetailPage";
+import ReviewForm from "./components/ReviewForm";
+import BookmarkPage from "./pages/BookmarkPage";
 
 const App = () => {
   const { isAuthenticated } = useAuthStore();
@@ -38,6 +43,36 @@ const App = () => {
           path="/email-verification"
           element={
             isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
+          }
+        />
+        <Route
+          path="/reviews"
+          element={
+            isAuthenticated ? <ReviewPage /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/reviews/new"
+          element={
+            isAuthenticated ? <ReviewForm /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/reviews/:id"
+          element={
+            isAuthenticated ? <ReviewDetailPage /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/reviews/:id/edit"
+          element={
+            isAuthenticated ? <ReviewForm /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/bookmarks"
+          element={
+            isAuthenticated ? <BookmarkPage /> : <Navigate to="/login" replace />
           }
         />
       </Routes>

@@ -22,6 +22,11 @@ const userService = {
     const response = await api.put("/api/users/profile", data);
     return response.data;
   },
+
+  getUserById: async (userId) => {
+    const response = await api.get(`/api/users/${userId}`);
+    return response.data;
+  },
 };
 
 export default userService;
