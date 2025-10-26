@@ -17,13 +17,8 @@ const MainLayout = ({ children, className = "" }) => {
 
   return (
     <div className="min-h-screen bg-blue-50 flex justify-center">
-      <Header
-        onLogout={user ? handleLogout : undefined}
-        handleProfilePage={handleProfilePage}
-      />
-      <div className={`w-full relative mt-16 bg-gray-50 ${className}`}>
-        {children}
-      </div>
+      <Header onLogout={handleLogout} handleProfilePage={handleProfilePage} />
+      <div className={`w-full mt-16 bg-gray-50 z-0 ${className}`}>{children}</div>
     </div>
   );
 };

@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
 import MainLayout from "../components/layout/MainLayout";
-import PostList from "../components/PostList"; // 네 프로젝트에 이미 있는 컴포넌트라고 가정
+import Header from "../components/layout/Header";
+import PostList from "../components/PostList";
+import ReviewList from "./ReviewList";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -70,6 +72,8 @@ const Home = () => {
 
   return (
     <MainLayout>
+      <Header onLogout={handleLogout} />
+      
       <div style={{ minHeight: "100vh", background: "#f7f7f7" }}>
         <div className="flex items-center justify-between p-4">
           <h1 className="font-bold text-2xl">여행 게시글 검색/정렬</h1>
@@ -80,7 +84,6 @@ const Home = () => {
             {showForm ? "닫기" : "✏️ 작성하기"}
           </button>
         </div>
-
         {showForm && (
           <div className="card max-w-2xl mx-auto mt-4">
             <h2 className="text-xl font-semibold mb-4">새 여행 등록</h2>
@@ -100,6 +103,9 @@ const Home = () => {
         )}
 
         <PostList />
+        <div className="review-section">
+          <ReviewList />
+        </div>
       </div>
     </MainLayout>
   );

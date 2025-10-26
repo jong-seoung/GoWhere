@@ -7,6 +7,12 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
+import ReviewList from "./pages/ReviewList";
+import ReviewPage from "./pages/ReviewPage";
+import ReviewDetailPage from "./pages/ReviewDetailPage";
+import ReviewForm from "./components/ReviewForm";
+import BookmarkPage from "./pages/BookmarkPage";
+import PasswordFind from "./pages/PasswordFind";
 
 import BuddyHub from "./pages/buddy/BuddyHub";
 import BuddyList from "./pages/buddy/BuddyList";
@@ -55,11 +61,58 @@ export default function App() {
         <Route path="/buddies/list" element={<BuddyList />} />
         <Route path="/buddies/:id" element={<BuddyPostDetail />} />
 
-        {/* 보호 라우트 */}
         <Route
           path="/buddies/new"
           element={
-            isAuthenticated ? <BuddyCreateForm replace /> : <Navigate to="/" />
+            isAuthenticated ? (
+              <BuddyCreateForm replace />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/reviews"
+          element={
+            isAuthenticated ? <ReviewPage /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/reviews/new"
+          element={
+            isAuthenticated ? <ReviewForm /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/reviews/:id"
+          element={
+            isAuthenticated ? (
+              <ReviewDetailPage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/reviews/:id/edit"
+          element={
+            isAuthenticated ? <ReviewForm /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
+          path="/bookmarks"
+          element={
+            isAuthenticated ? (
+              <BookmarkPage />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            isAuthenticated ? <Navigate to="/" /> : <PasswordFind replace />
           }
         />
         <Route

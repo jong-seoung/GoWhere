@@ -6,6 +6,15 @@
 프론트 수정의 경우 **Hot Reload** 되어 적용됩니다.<br>
 백엔드 수정의 경우 수정후 **up 명령어**를 이용해 컨테이너를 재실행 해주세요.
 
+### 맥북이라면 아래 명령어를 먼저 실행해주세요
+
+```bash
+cd backend
+chmod +x gradlew
+git update-index --chmod=+x gradlew
+cd ..
+```
+
 ### 최초 실행
 
 개발 환경에서 프로젝트를 처음 실행할 때:
