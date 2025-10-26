@@ -73,12 +73,6 @@ export default function PostList() {
           <h1 className="text-2xl font-bold tracking-tight">여행 게시글 검색/정렬</h1>
           <p className="text-sm text-gray-500 mt-1">키워드·지역·태그로 원하는 글을 찾아보세요.</p>
         </div>
-        <a
-          href="/buddies"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white font-medium hover:shadow"
-        >
-          + 동행자 모집
-        </a>
       </div>
 
       {/* 툴바 */}
