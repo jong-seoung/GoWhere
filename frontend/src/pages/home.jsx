@@ -5,6 +5,7 @@ import Header from "../components/layout/Header";
 import PostList from "../components/PostList";
 import ReviewList from "./ReviewList";
 import BuddyList from "../components/buddy/BuddyList";
+import { useState } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -167,7 +168,6 @@ const Home = () => {
           <ReviewList />
         </div>
       </div>
-      <PostList />
     </MainLayout>
   );
 };

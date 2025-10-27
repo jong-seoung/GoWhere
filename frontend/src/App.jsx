@@ -37,6 +37,12 @@ export default function App() {
           element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
         />
         <Route
+          path="/profile/:userId"
+          element={
+            isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+          }
+        />
+        <Route
           path="/email-verification"
           element={
             isAuthenticated ? <Navigate to="/" /> : <EmailVerify replace />
