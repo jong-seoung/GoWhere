@@ -1,6 +1,6 @@
 // src/components/PostList.jsx
 import { useEffect, useState } from "react";
-import { fetchPosts } from "../api/searchApi";
+import api from "../services/api"; // Axios 인스턴스
 import SearchBar from "./SearchBar";
 import SortBar from "./SortBar";
 import PostCard from "./PostCard";
@@ -23,8 +23,13 @@ const SkeletonCard = () => (
 );
 
 export default function PostList() {
-  const [params, setParams] = useState({ sort: "createdAt", dir: "desc", page: 0, size: 12 });
-  const [data, setData] = useState({ content: [], totalPages: 0, number: 0 });
+  const [params, setParams] = useState({
+    sort: "createdAt",
+    dir: "desc",
+    page: 0,
+    size: 12,
+  });
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [rawError, setRawError] = useState("");
 
@@ -37,6 +42,7 @@ export default function PostList() {
     return msg || "문제를 확인 중입니다.";
   };
 
+  // 여행 목록 불러오기
   const load = async (over = {}) => {
     setLoading(true);
     setRawError("");
