@@ -7,16 +7,14 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import EmailVerify from "./pages/EmailVerify";
 import OAuth2Callback from "./pages/OAuth2Callback";
-import ReviewList from "./pages/ReviewList";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
 import ReviewForm from "./components/ReviewForm";
 import BookmarkPage from "./pages/BookmarkPage";
 import PasswordFind from "./pages/PasswordFind";
 
-import BuddyHub from "./pages/buddy/BuddyHub";
-import BuddyList from "./pages/buddy/BuddyList";
-import BuddyCreateForm from "./pages/buddy/BuddyCreateForm";
+import BuddyList from "./components/buddy/BuddyList";
+import BuddyCreateForm from "./components/buddy/BuddyCreateForm";
 import BuddyPostDetail from "./pages/buddy/BuddyPostDetail";
 import MyApplications from "./pages/buddy/MyApplications";
 import Applicants from "./pages/buddy/Applicants";
@@ -57,7 +55,6 @@ export default function App() {
         />
 
         {/* 동행자 허브/목록/상세 */}
-        <Route path="/buddies" element={<BuddyHub />} />
         <Route path="/buddies/list" element={<BuddyList />} />
         <Route path="/buddies/:id" element={<BuddyPostDetail />} />
 
