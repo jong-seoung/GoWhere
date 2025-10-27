@@ -1,5 +1,6 @@
 package com.gowhere.backend.security;
 
+import com.gowhere.backend.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -61,9 +63,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                try {
+                    Long userId = Long.parseLong(userIdentifier);
+                    userRepository.findById(userId)
+                            .ifPresent(user -> request.setAttribute("user", user));
+                } catch (NumberFormatException e) {
+                    userRepository.findByEmail(userIdentifier)
+                            .ifPresent(user -> request.setAttribute("user", user));
+                }
             }
-        }
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+        }
     }
 }

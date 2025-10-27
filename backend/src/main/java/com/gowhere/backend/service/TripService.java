@@ -34,7 +34,7 @@ public class TripService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User author = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
-        trip.setAutor(author);
+        trip.setAuthor(author);
 
         return tripRepository.save(trip);
     }
@@ -79,7 +79,7 @@ public class TripService {
     // 작성자 권한 확인
     private void checkAuthor(Trip trip) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!trip.getAutor().getUsername().equals(username)) {
+        if (!trip.getAuthor().getUsername().equals(username)) {
             throw new RuntimeException("권한이 없습니다. 본인이 작성한 게시물 외에는 수정/삭제할 수 없습니다.");
         }
     }

@@ -17,13 +17,23 @@ export const authService = {
     return response.data;
   },
 
-  async sendEmail (email) {
-    const response = await api.post(`/api/auth/sendEmail`, {email});
+  async sendEmail(email) {
+    const response = await api.post(`/api/auth/sendEmail`, { email });
     return response.data;
   },
 
-  async verifyEmail (code, email) {
-    const response = await api.post(`/api/auth/verifyEmail/${code}`, {email});
+  async verifyEmail(code, email) {
+    const response = await api.post(`/api/auth/verifyEmail/${code}`, { email });
+    return response.data;
+  },
+
+  async changePwCode(code, email) {
+    const response = await api.post(`/api/auth/findPw/${code}`, { email });
+    return response.data;
+  },
+
+  async changePw(formData) {
+    const response = await api.post(`api/auth/changePw`,  formData );
     return response.data;
   },
 

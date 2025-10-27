@@ -24,7 +24,7 @@ public class SearchController {
 
     //정렬 기준으로 허용할 수 있는 컬럼 목록을 제한하기 위하여
     private static final Set<String> ALLOWED_SORTS =
-            new HashSet<>(Arrays.asList("createdAt", "likeCount", "viewCount", "ratingAvg", "title"));
+            new HashSet<>(Arrays.asList("createdAt"));
 
     @GetMapping("/posts")
     public Page<TravelPostSummaryDto> searchPosts(

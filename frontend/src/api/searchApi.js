@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
 });
 
 export async function fetchPosts({
@@ -19,6 +19,8 @@ export async function fetchPosts({
       (params[k] === undefined || params[k] === null || params[k] === "") &&
       delete params[k]
   );
-  const { data } = await client.get("/search/posts", { params });
+
+  
+  const { data } = await client.get("/api/search/posts", { params });
   return data;
 }

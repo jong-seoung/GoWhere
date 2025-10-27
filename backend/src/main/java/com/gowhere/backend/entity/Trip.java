@@ -1,8 +1,7 @@
 package com.gowhere.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Trip {
 
     @Id
@@ -23,7 +25,7 @@ public class Trip {
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    private com.gowhere.backend.entity.TripType triptype;
+    private TripType triptype;
 
     // 출발지/목적지 주소
     private String departure;
@@ -34,9 +36,11 @@ public class Trip {
     private double destinationLat;
     private double destinationLng;
 
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Checklist> checklists = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Destination> destinations = new ArrayList<>();
 
@@ -44,5 +48,5 @@ public class Trip {
     // ✅ 작성자 추가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User autor;
+    private User author;
 }
