@@ -1,7 +1,7 @@
 package com.gowhere.backend.repository;
 
-import com.gowhere.backend.entity.SocialLink;
-import com.gowhere.backend.entity.SocialType;
+import com.gowhere.backend.social.SocialLink;
+import com.gowhere.backend.social.SocialType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
